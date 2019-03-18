@@ -8,13 +8,10 @@ public class NoisyMesh : MonoBehaviour {
 	public float Speed = 0.005f;
 
 	public Vector2 NoisePosition;
-	public float NoiseScale = 0.15f;
+	public float NoiseScale = 0.02f;
 
-	public bool StartExpand = false;
+	public bool StartNoise = false;
 
-	public bool ExpandAtStart = false;
-	public GameObject StartPosition;
-	public float SpeedToExpand = 0.5f;
 
 	bool isExpanding = false;
 	bool isImpanding = false;
@@ -45,64 +42,46 @@ public class NoisyMesh : MonoBehaviour {
 		if (mf != null) {
 			OriginalVertices = mf.mesh.vertices;
 		}
-		else{
+		else {
 			smr = meshToMove.GetComponent<SkinnedMeshRenderer>();
-			if(smr != null) {
+			if (smr != null) {
 				OriginalVertices = smr.sharedMesh.vertices;
 			}
 		}
-
-
 		NewVertices = new Vector3[OriginalVertices.Length];
-
-		if (ExpandAtStart) {
-			isExpanding = true;
-
-			for (int i = 0 ; i < NewVertices.Length ; i++) {
-				NewVertices[i] = StartPosition.transform.localPosition - gameObject.transform.localPosition;
-			}
-			mf.mesh.vertices = NewVertices;
-		}
 	}
 
 	// Update is called once per frame
 	void FixedUpdate() {
 
-		if (StartExpand) {
-			if (isExpanding) {
+		if (StartNoise) {
+			NoisePosition.x += Speed;
+			NoisePosition.y += Speed;
 
-				NoisePosition.x += Speed;
-				NoisePosition.y += Speed;
+			StartSpeed = Speed;
+			StartNoiseScale = NoiseScale;
 
-				Speed = Mathf.Lerp(StartSpeed, OriginalSpeed, SpeedToExpand);
-				NoiseScale = Mathf.Lerp(StartNoiseScale, OriginalNoiseScale, SpeedToExpand);
+			for (int i = 0 ; i < NewVertices.Length ; i++) {
 
-				StartSpeed = Speed;
-				StartNoiseScale = NoiseScale;
+				newX = OriginalVertices[i].x + Mathf.PerlinNoise((OriginalVertices[i].x + NoisePosition.x), (OriginalVertices[i].y + NoisePosition.y)) * NoiseScale - (0.5f * NoiseScale);
+				newY = OriginalVertices[i].y + Mathf.PerlinNoise((OriginalVertices[i].y + NoisePosition.x), (OriginalVertices[i].z + NoisePosition.y)) * NoiseScale - (0.5f * NoiseScale);
+				newZ = OriginalVertices[i].z + Mathf.PerlinNoise((OriginalVertices[i].z + NoisePosition.x), (OriginalVertices[i].x + NoisePosition.y)) * NoiseScale - (0.5f * NoiseScale);
 
-				for (int i = 0 ; i < NewVertices.Length ; i++) {
-
-					newX = Mathf.Lerp(NewVertices[i].x, OriginalVertices[i].x + Mathf.PerlinNoise((OriginalVertices[i].x + NoisePosition.x), (OriginalVertices[i].y + NoisePosition.y)) * NoiseScale - (0.5f * NoiseScale), SpeedToExpand);
-					newY = Mathf.Lerp(NewVertices[i].y, OriginalVertices[i].y + Mathf.PerlinNoise((OriginalVertices[i].y + NoisePosition.x), (OriginalVertices[i].z + NoisePosition.y)) * NoiseScale - (0.5f * NoiseScale), SpeedToExpand);
-					newZ = Mathf.Lerp(NewVertices[i].z, OriginalVertices[i].z + Mathf.PerlinNoise((OriginalVertices[i].z + NoisePosition.x), (OriginalVertices[i].x + NoisePosition.y)) * NoiseScale - (0.5f * NoiseScale), SpeedToExpand);
-
-					NewVertices[i].x = newX;
-					NewVertices[i].y = newY;
-					NewVertices[i].z = newZ;
-
-				}
+				NewVertices[i].x = newX;
+				NewVertices[i].y = newY;
+				NewVertices[i].z = newZ;
 
 			}
-
 
 			if (mf != null) {
 				mf.mesh.vertices = NewVertices;
-			}else if(smr != null) {
-				
+			}
+			else if (smr != null) {
+
 				smr.sharedMesh.vertices = NewVertices;
 			}
-			
-		}
 
+		}
 	}
 }
+
