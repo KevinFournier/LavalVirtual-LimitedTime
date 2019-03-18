@@ -1,0 +1,16 @@
+{
+  "source": "Unity",
+  "applications": [
+    {
+      "app_key": "application.generated.unity.lvlimitedtime.exe",
+      "launch_type": "url",
+      "url": "steam://launch/",
+      "action_manifest_path": "C:\\Seb\\ENSAM - MTI3D\\M2\\_ProjetsUnity\\LimitedTime_2019\\LavalVirtual-LimitedTime\\LV-LimitedTime\\actions.json",
+      "strings": {
+        "en_us": {
+          "name": "LV-LimitedTime [Testing]"
+        }
+      }
+    }
+  ]
+}
