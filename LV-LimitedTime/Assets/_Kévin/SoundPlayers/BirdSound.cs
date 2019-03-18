@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundPlayer_bird : SoundPlayer
+public class BirdSound : SoundPlayer
 {
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        Init(); 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
