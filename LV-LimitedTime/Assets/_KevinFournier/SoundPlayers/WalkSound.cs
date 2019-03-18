@@ -17,7 +17,12 @@ public class WalkSound : SoundPlayer
 
     private void OnTriggerEnter(Collider other)
     {
+        print(other);
+
         if (other.CompareTag(Tags.Ground))
+        {
+            print(other.GetComponent<Ground>().Type);
             PlaySound((int)other.GetComponent<Ground>().Type);
+        }
     }
 }

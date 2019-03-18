@@ -10,9 +10,14 @@ public class SoundPlayer : MonoBehaviour
 
 	public bool PlayAtStart = false;
 
+    [Header("Gestion des loops")]
 	public bool Loop = false;
+    [Space]
     public bool LoopWithDelay = false;
+    public bool LoopRandom = false;
     public Vector2 LoopDelay = Vector2.zero;
+
+    public int NbOfRepetition = -1;
 
 	[HideInInspector]
 	protected AudioSource Source;
@@ -27,11 +32,21 @@ public class SoundPlayer : MonoBehaviour
     /// </summary>
 	protected virtual void Init()
     {
+        if (LoopWithDelay)
+            Loop = false;
+
 		Source = GetComponent<AudioSource>();
 		Source.playOnAwake = false;
 		Source.loop = Loop;
+        Source.spatialBlend = 1.0f;
+        Source.Stop();
 
-        if (PlayAtStart)
+        if (PlayAtStart && LoopWithDelay)
+        {
+            PlayRandomSound();
+            RepeatSoundWithDelay(LoopDelay, LoopRandom, NbOfRepetition);
+        }
+        else if (PlayAtStart)
             PlayRandomSound();
 	}
 
@@ -42,8 +57,9 @@ public class SoundPlayer : MonoBehaviour
     protected bool CanPlaySound()
         => !Source.isPlaying && AudioClips != null && AudioClips.Count != 0;
 
-    protected IEnumerator RepeatSound(Vector2 delayRange, int nbMax = -1, int count = 0)
+    protected IEnumerator RepeatSound(Vector2 delayRange, bool randomSound = false, int nbMax = -1, int count = 1)
     {
+
         // Attend que le son soit fini de jouer.
         yield return new WaitWhile(() => Source.isPlaying);
 
@@ -54,8 +70,13 @@ public class SoundPlayer : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(delay);
 
-        if (nbMax > 0 || count < nbMax)
-            StartCoroutine(RepeatSound(delayRange, nbMax, ++count));
+        if (randomSound)
+            PlayRandomSound();
+        else
+            Source.Play();
+
+        if (nbMax == -1 || nbMax > 0 && count < nbMax)
+            StartCoroutine(RepeatSound(delayRange, randomSound, nbMax, ++count));
 
     }
 
@@ -113,12 +134,12 @@ public class SoundPlayer : MonoBehaviour
         }
 	}
 
-    public void RepeatSound(Vector2 delayRange = default, int nbMax = -1)
+    public Coroutine RepeatSoundWithDelay(Vector2 delayRange = default, bool randomSound = false, int nbMax = -1)
     {
         if (delayRange == default)
             delayRange = Vector2.zero;
 
-        StartCoroutine(RepeatSound(delayRange, nbMax, 0));
+        return StartCoroutine(RepeatSound(delayRange, randomSound, nbMax));
     }
     #endregion
 
