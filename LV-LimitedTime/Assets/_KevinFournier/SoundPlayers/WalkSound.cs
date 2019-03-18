@@ -17,9 +17,7 @@ public class WalkSound : SoundPlayer
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag(Tags.Ground))
-            return;
-
-        PlaySound((int)other.GetComponent<Ground>().Type);
+        if (other.CompareTag(Tags.Ground))
+            PlaySound((int)other.GetComponent<Ground>().Type);
     }
 }

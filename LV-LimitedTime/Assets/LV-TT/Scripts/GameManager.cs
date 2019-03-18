@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public WindZone WindZone;
+
     private void Awake()
     {
         Instance = this;

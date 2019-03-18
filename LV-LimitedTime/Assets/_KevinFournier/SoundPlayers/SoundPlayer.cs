@@ -7,11 +7,15 @@ public class SoundPlayer : MonoBehaviour
 {
 
 	public List<AudioClip> AudioClips;
+
 	public bool PlayAtStart = false;
-	public bool isLoop = false;
+
+	public bool Loop = false;
+    public bool LoopWithDelay = false;
+    public Vector2 LoopDelay = Vector2.zero;
 
 	[HideInInspector]
-	public AudioSource Source;
+	protected AudioSource Source;
 
 	private void Start()
     {
@@ -25,7 +29,7 @@ public class SoundPlayer : MonoBehaviour
     {
 		Source = GetComponent<AudioSource>();
 		Source.playOnAwake = false;
-		Source.loop = isLoop;
+		Source.loop = Loop;
 
         if (PlayAtStart)
             PlayRandomSound();
@@ -38,11 +42,28 @@ public class SoundPlayer : MonoBehaviour
     protected bool CanPlaySound()
         => !Source.isPlaying && AudioClips != null && AudioClips.Count != 0;
 
+    protected IEnumerator RepeatSound(Vector2 delayRange, int nbMax = -1, int count = 0)
+    {
+        // Attend que le son soit fini de jouer.
+        yield return new WaitWhile(() => Source.isPlaying);
+
+        var delay
+            = Random.Range(
+                Mathf.Min(delayRange.x, delayRange.y),
+                Mathf.Max(delayRange.x, delayRange.y));
+
+        yield return new WaitForSecondsRealtime(delay);
+
+        if (nbMax > 0 || count < nbMax)
+            StartCoroutine(RepeatSound(delayRange, nbMax, ++count));
+
+    }
+
     #region Public Methods
     /// <summary>
     /// Joue le premier son de la liste d'audioclip.
     /// </summary>
-    public virtual void PlaySound()
+    public void PlaySound()
     {
         if (!CanPlaySound())
             return;
@@ -59,7 +80,7 @@ public class SoundPlayer : MonoBehaviour
     /// <summary>
     /// Joue un son aléatoire de la list d'audioclips.
     /// </summary>
-	public virtual void PlayRandomSound()
+	public void PlayRandomSound()
     {
         if (!CanPlaySound())
             return;
@@ -91,5 +112,14 @@ public class SoundPlayer : MonoBehaviour
             Source.Play();
         }
 	}
+
+    public void RepeatSound(Vector2 delayRange = default, int nbMax = -1)
+    {
+        if (delayRange == default)
+            delayRange = Vector2.zero;
+
+        StartCoroutine(RepeatSound(delayRange, nbMax, 0));
+    }
     #endregion
+
 }
