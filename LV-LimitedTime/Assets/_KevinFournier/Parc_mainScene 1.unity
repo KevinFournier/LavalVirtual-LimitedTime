@@ -1563,7 +1563,6 @@ MonoBehaviour:
   LoopRandom: 0
   LoopDelay: {x: 0, y: 0}
   NbOfRepetition: -1
-  Terrain: {fileID: 0}
   map: {fileID: 28886176468757132, guid: 8ee04e1f17f7f5549acabd4c8d8a68c4, type: 2}
 --- !u!82 &78725910
 AudioSource:
@@ -22514,7 +22513,6 @@ MonoBehaviour:
   LoopRandom: 0
   LoopDelay: {x: 0, y: 0}
   NbOfRepetition: -1
-  Terrain: {fileID: 0}
   map: {fileID: 28886176468757132, guid: 8ee04e1f17f7f5549acabd4c8d8a68c4, type: 2}
 --- !u!1001 &1671170303
 PrefabInstance:

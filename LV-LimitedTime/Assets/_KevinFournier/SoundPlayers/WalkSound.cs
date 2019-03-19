@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class WalkSound : SoundPlayer
 {
-    public Terrain Terrain;
     public Texture2D map;
 
 	private void Start()
