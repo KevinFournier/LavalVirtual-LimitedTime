@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(ParticleSystem))]
-[ExecuteInEditMode]
-public class ParticuleStaticObject : MonoBehaviour {
-	[Header("Particules")]
-	public GameObject ObjetMesh;
+public class ParticleOnSelectedZone : MonoBehaviour {
+
+	public Collider Collider;
+	public SkinnedMeshRenderer MySkinnedMeshRenderer;
+
 	public Material ParticuleMaterial;
 	public ParticleSystem Particules;
 
@@ -24,8 +24,12 @@ public class ParticuleStaticObject : MonoBehaviour {
 	public Vector2 startLifetime = new Vector2(0.5f, 1);
 	public float WindZoneMultiplier = 0.1f;
 
-	Mesh MeshToCopy;
-	MeshRenderer MeshRendererToCopy;
+
+	Vector3[] ValidPoints;
+	int countValidPoint = 0;
+	Mesh Mesh;
+
+	GameObject ParticleHolder;
 
 	ParticleSystem.MainModule ModuleMain;
 	ParticleSystem.EmissionModule ModuleEmission;
@@ -35,35 +39,22 @@ public class ParticuleStaticObject : MonoBehaviour {
 
 	ParticleSystemRenderer ParticleSystemRenderer;
 
-	#region ParametresUpdate
-	float oldStartSize;
-	float oldRateOverTime;
-	float oldWindZoneMultiplier;
-	int oldLimiteMax;
-	Color oldColor1;
-	Color oldColor2;
-	Vector2 oldstartLifetime;
-	ParticleSystemMeshShapeType OldMeshShapeType;
+	// Start is called before the first frame update
+	[ContextMenu("Setup")]
+	void Start() {
+		Mesh = new Mesh();
 
-	#endregion
+		ParticleHolder = new GameObject("ParticleHolder");
+		ParticleHolder.transform.SetParent(MySkinnedMeshRenderer.transform.parent);
+		ParticleHolder.transform.rotation = Quaternion.Euler(-90, 0, 0);
+		Particules = ParticleHolder.AddComponent<ParticleSystem>();
+		ParticleSystemRenderer = ParticleHolder.GetComponent<ParticleSystemRenderer>();
 
-
-	private void OnEnable() {
 		Setup();
 	}
 
-	// Start is called before the first frame update
-	[ContextMenu("Setup")]
 	void Setup() {
 
-		if (ObjetMesh == null)
-			ObjetMesh = transform.parent.gameObject;
-
-		MeshToCopy = ObjetMesh.GetComponent<MeshFilter>().sharedMesh;
-		MeshRendererToCopy = ObjetMesh.GetComponent<MeshRenderer>();
-		ParticleSystemRenderer = GetComponent<ParticleSystemRenderer>();
-
-		Particules = GetComponent<ParticleSystem>();
 		ParticleSystem.MinMaxCurve minMax = new ParticleSystem.MinMaxCurve(startLifetime.x, startLifetime.y);
 
 		//
@@ -72,6 +63,7 @@ public class ParticuleStaticObject : MonoBehaviour {
 		ModuleMain.startSpeed = startSpeed;
 		ModuleMain.startLifetime = minMax;
 		ModuleMain.maxParticles = LimitMax;
+		//ModuleMain.maxParticles = countValidPoint;
 		ParticleSystem.MinMaxGradient minMaxGradient = new ParticleSystem.MinMaxGradient(Couleur1, Couleur2);
 		ModuleMain.startColor = minMaxGradient;
 		ModuleMain.simulationSpace = ParticleSystemSimulationSpace.World;
@@ -81,6 +73,7 @@ public class ParticuleStaticObject : MonoBehaviour {
 		//
 		// EMISSION MODULE
 		ModuleEmission = Particules.emission;
+		ModuleEmission.enabled = true;
 		ModuleEmission.rateOverTime = RateOverTIme;
 
 		//
@@ -97,10 +90,11 @@ public class ParticuleStaticObject : MonoBehaviour {
 		//
 		// SHAPE MODULE
 		ModuleShape = Particules.shape;
-		ModuleShape.shapeType = ParticleSystemShapeType.MeshRenderer;
+		ModuleShape.enabled = true;
+		ModuleShape.shapeType = ParticleSystemShapeType.Mesh;
 		ModuleShape.meshShapeType = ParticleSystemMeshShapeType.Vertex;
 		ModuleShape.useMeshColors = false;
-		ModuleShape.meshRenderer = MeshRendererToCopy;
+		ModuleShape.mesh = Mesh;
 		ModuleShape.meshShapeType = MeshShapeType;
 		//
 		// RENDERER MODULE
@@ -113,57 +107,54 @@ public class ParticuleStaticObject : MonoBehaviour {
 		ModuleExternalForce.influenceFilter = ParticleSystemGameObjectFilter.LayerMask;
 		ModuleExternalForce.multiplier = WindZoneMultiplier;
 
-
+		countParticle();
 	}
 
+	List<Vector3> PointsInZone = new List<Vector3>();
+	List<int> PointsInZoneIndex = new List<int>();
+	ParticleSystem.Particle[] particlesArray;
 
-	void Start() {
-		oldStartSize = startSize;
+	void countParticle() {
 
-		Setup();
+		countValidPoint = 0;
+		for (int i = 0 ; i < Mesh.vertexCount; i++) {
+			var v = Mesh.vertices[i];
+
+			if (Collider.bounds.Contains(v)) {
+
+				countValidPoint++;
+				PointsInZone.Add(v);
+				PointsInZoneIndex.Add(i);
+				/*
+				GameObject g = GameObject.CreatePrimitive(PrimitiveType.Cube);
+				g.transform.SetParent(ParticleHolder.transform);
+				g.transform.localScale = Vector3.one * 0.01f;
+				g.transform.localPosition = v;
+				*/
+			}
+		}
+		LimitMax = countValidPoint;
+		ModuleMain.maxParticles = LimitMax;
+
+		particlesArray = new ParticleSystem.Particle[LimitMax];
 	}
+
 
 	// Update is called once per frame
-	void Update() {
-		if (Particules == null) { Setup(); }
+	void FixedUpdate() {
 
-		if (startSize != oldStartSize) {
-			ModuleMain.startSize = startSize;
-			oldStartSize = startSize;
+		MySkinnedMeshRenderer.BakeMesh(Mesh);
+
+		Particules.GetParticles(particlesArray);
+
+		foreach (var item in PointsInZoneIndex) {
+			particlesArray[item].position = PointsInZone[item];
 		}
 
-		if (RateOverTIme != oldRateOverTime) {
-			ModuleEmission.rateOverTime = RateOverTIme;
-			oldRateOverTime = RateOverTIme;
-		}
+		Particules.SetParticles(particlesArray);
 
 
-		if (Couleur1 != oldColor1 || Couleur2 != oldColor2) {
-			ParticleSystem.MinMaxGradient minMaxGradient = new ParticleSystem.MinMaxGradient(Couleur1, Couleur2);
-			ModuleMain.startColor = minMaxGradient;
-			oldColor1 = Couleur1;
-			oldColor2 = Couleur2;
-		}
-
-		if (MeshShapeType != OldMeshShapeType) {
-			OldMeshShapeType = MeshShapeType;
-			ModuleShape.meshShapeType = MeshShapeType;
-		}
-		if (oldWindZoneMultiplier != WindZoneMultiplier) {
-			ModuleExternalForce.multiplier = WindZoneMultiplier;
-			oldWindZoneMultiplier = WindZoneMultiplier;
-		}
-
-		if (oldLimiteMax != LimitMax) {
-			oldLimiteMax = LimitMax;
-			ModuleMain.maxParticles = LimitMax;
-			//Setup();
-		}
-
-		if (oldstartLifetime != startLifetime) {
-			ParticleSystem.MinMaxCurve minMax = new ParticleSystem.MinMaxCurve(startLifetime.x, startLifetime.y);
-			ModuleMain.startLifetime = minMax;
-			oldstartLifetime = startLifetime;
-		}
+			
+		//print(countValidPOint);
 	}
 }
