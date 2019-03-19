@@ -17923,10 +17923,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 0.6312256
+  MinDistance: 0.3
   MaxDistance: 8.078308
   Pan2D: 0
-  rolloffMode: 2
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -62094,7 +62094,7 @@ GameObject:
   - component: {fileID: 970556039}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -107531,6 +107531,92 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1903654823}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1904796613
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1904796615}
+  - component: {fileID: 1904796614}
+  m_Layer: 0
+  m_Name: Light Probe Group
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!220 &1904796614
+LightProbeGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1904796613}
+  m_Enabled: 1
+  m_SourcePositions:
+  - {x: 4.241516, y: 0.9592085, z: 19.41452}
+  - {x: 33.854492, y: 0.9592085, z: 39.8116}
+  - {x: -6.8242493, y: 0.9592085, z: 6.418579}
+  - {x: -49.58583, y: 0.9592085, z: -11.111191}
+  - {x: -6.868225, y: 1.5270691, z: -11.561157}
+  - {x: 0.567749, y: 0.9592085, z: -5.55394}
+  - {x: 9.201263, y: 0.9592085, z: -10.390945}
+  - {x: 35.39749, y: 0.9592085, z: -21.81334}
+  - {x: -19.357056, y: 0.9592085, z: -20.267365}
+  - {x: -20.34793, y: 0.9592085, z: -22.999146}
+  - {x: -21.602386, y: 0.9592085, z: -32.105682}
+  - {x: -28.166092, y: 0.9592085, z: -38.00067}
+  - {x: -24.965439, y: 0.9592085, z: -22.195618}
+  - {x: -31.37085, y: 0.9592085, z: -15.469879}
+  - {x: 16.66925, y: 0.9592085, z: 26.655945}
+  - {x: 20.324554, y: 0.9592085, z: -17.078873}
+  - {x: -1.6760864, y: 0.9592085, z: -10.69278}
+  - {x: 6.9389343, y: 0.9592085, z: -1.5303497}
+  - {x: 5.4577026, y: 0.9592085, z: -10.969131}
+  - {x: 8.141541, y: 0.9592085, z: -13.407211}
+  - {x: 11.241882, y: 0.9592085, z: -12.281845}
+  - {x: 16.741272, y: 0.9592085, z: -13.398056}
+  - {x: 14.383911, y: 0.9592085, z: -14.555893}
+  - {x: 16.503998, y: 0.9592085, z: -17.258255}
+  - {x: -10.886414, y: 1.5270691, z: -9.789719}
+  - {x: -11.357269, y: 1.827033, z: -12.792053}
+  - {x: -9.4644165, y: 1.827033, z: -13.682159}
+  - {x: -10.886414, y: 0.14128399, z: -9.789719}
+  - {x: -6.868225, y: 0.14128399, z: -11.561157}
+  - {x: -11.357269, y: 0.44124794, z: -12.792053}
+  - {x: -9.4644165, y: 0.44124794, z: -13.682159}
+  - {x: -17.45163, y: 0.9592085, z: -19.45346}
+  - {x: -16.092407, y: 0.9592085, z: -22.37912}
+  - {x: -17.387634, y: 0.9592085, z: -24.095032}
+  - {x: -28.201767, y: 0.9592085, z: -21.618881}
+  - {x: -26.445892, y: 0.9592085, z: -19.551987}
+  - {x: -28.96022, y: 0.9592085, z: -17.815964}
+  - {x: -32.428757, y: 0.9592085, z: -17.236755}
+  - {x: -35.18756, y: 0.9592085, z: -15.351135}
+  - {x: -32.895477, y: 0.9592085, z: -13.591309}
+  - {x: -50.62018, y: 0.9592085, z: -8.428543}
+  - {x: -36.72461, y: 0.9592085, z: -13.147903}
+  - {x: -41.501526, y: 0.9592085, z: -9.6887665}
+  - {x: -43.767746, y: 0.9592085, z: -11.727219}
+  - {x: -44.802094, y: 0.9592085, z: -9.044571}
+  m_Dering: 0
+--- !u!4 &1904796615
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1904796613}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 279.81067, y: 1.2710989, z: 197.07762}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1911762266 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 306636932432193656, guid: 9521f69d4aca0d14db2c8c6c25250d35,
