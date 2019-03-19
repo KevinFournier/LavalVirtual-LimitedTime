@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [RequireComponent(typeof(AudioSource))]
 public class SoundPlayer : MonoBehaviour
 {
-
+    public List<ParticleSystem> Particles;
+    public float Multiplier = 1f;
 	public List<AudioClip> AudioClips;
 
 	public bool PlayAtStart = false;
@@ -27,6 +29,25 @@ public class SoundPlayer : MonoBehaviour
 		Init();
 	}
 
+    private void FixedUpdate()
+    {
+        if (Particles == null || Particles.Count <= 0)
+            return;
+
+        float[] temp = new float[128];
+        Source.GetSpectrumData(temp, 0, FFTWindow.Rectangular);
+        var average = temp.Average();
+
+        foreach (var particle in Particles)
+        {
+            if (particle != null)
+            {
+                ParticleSystem.EmissionModule emissionModule = particle.emission;
+                emissionModule.rateOverTime = (int)(average * Multiplier);
+            }
+        }
+    }
+
     /// <summary>
     /// Initialise le SoundPlayer en fonction des paramètres insérés dans Unity.
     /// </summary>
@@ -41,14 +62,29 @@ public class SoundPlayer : MonoBehaviour
         Source.spatialBlend = 1.0f;
         Source.Stop();
 
+
         if (PlayAtStart && LoopWithDelay)
         {
+            startParticle();
+
             PlayRandomSound();
             RepeatSoundWithDelay(LoopDelay, LoopRandom, NbOfRepetition);
         }
         else if (PlayAtStart)
+        {
+            startParticle();
+
             PlayRandomSound();
+        }
 	}
+
+    private void startParticle()
+    {
+            if (Particles != null)
+                foreach (var particle in Particles)
+                    if (particle != null)
+                        particle.Play();
+    }
 
     /// <summary>
     /// Indique si le SoundPlayer actuel peux jouer un son.
@@ -62,6 +98,8 @@ public class SoundPlayer : MonoBehaviour
 
         // Attend que le son soit fini de jouer.
         yield return new WaitWhile(() => Source.isPlaying);
+
+
 
         var delay
             = Random.Range(
