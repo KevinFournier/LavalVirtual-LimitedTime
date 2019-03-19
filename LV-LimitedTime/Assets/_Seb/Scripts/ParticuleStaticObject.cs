@@ -4,8 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(ParticleSystem))]
 [ExecuteInEditMode]
-public class ParticuleStaticObject : MonoBehaviour
-{
+public class ParticuleStaticObject : MonoBehaviour {
 	[Header("Particules")]
 	public GameObject ObjetMesh;
 	public Material ParticuleMaterial;
@@ -15,11 +14,12 @@ public class ParticuleStaticObject : MonoBehaviour
 	[Header("Parametres:")]
 	public int LimitMax = 10000;
 	public int RateOverTIme = 10000;
-	public Color Couleur = Color.magenta;
+	public Color Couleur1 = Color.magenta;
+	public Color Couleur2 = Color.red;
 	public ParticleSystemMeshShapeType MeshShapeType;
 	[HideInInspector]
 	public float startSpeed = 0f;
-	[Range(0,0.3f)]
+	[Range(0, 0.3f)]
 	public float startSize = 0.01f;
 	public Vector2 startLifetime = new Vector2(0.5f, 1);
 	public float WindZoneMultiplier = 0.1f;
@@ -40,7 +40,8 @@ public class ParticuleStaticObject : MonoBehaviour
 	float oldRateOverTime;
 	float oldWindZoneMultiplier;
 	int oldLimiteMax;
-	Color oldColor;
+	Color oldColor1;
+	Color oldColor2;
 	Vector2 oldstartLifetime;
 	ParticleSystemMeshShapeType OldMeshShapeType;
 
@@ -71,7 +72,8 @@ public class ParticuleStaticObject : MonoBehaviour
 		ModuleMain.startSpeed = startSpeed;
 		ModuleMain.startLifetime = minMax;
 		ModuleMain.maxParticles = LimitMax;
-		ModuleMain.startColor = Couleur;
+		ParticleSystem.MinMaxGradient minMaxGradient = new ParticleSystem.MinMaxGradient(Couleur1, Couleur2);
+		ModuleMain.startColor = minMaxGradient;
 		ModuleMain.simulationSpace = ParticleSystemSimulationSpace.World;
 		//ModuleMain.customSimulationSpace = transform;
 		ModuleMain.startSize = startSize;
@@ -115,17 +117,15 @@ public class ParticuleStaticObject : MonoBehaviour
 	}
 
 
-    void Start()
-    {
+	void Start() {
 		oldStartSize = startSize;
 
 		Setup();
-    }
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-		if(Particules == null) { Setup(); }
+	// Update is called once per frame
+	void Update() {
+		if (Particules == null) { Setup(); }
 
 		if (startSize != oldStartSize) {
 			ModuleMain.startSize = startSize;
@@ -138,12 +138,14 @@ public class ParticuleStaticObject : MonoBehaviour
 		}
 
 
-		if (Couleur != oldColor) {
-			ModuleMain.startColor = Couleur;
-			oldColor = Couleur;
+		if (Couleur1 != oldColor1 || Couleur2 != oldColor2) {
+			ParticleSystem.MinMaxGradient minMaxGradient = new ParticleSystem.MinMaxGradient(Couleur1, Couleur2);
+			ModuleMain.startColor = minMaxGradient;
+			oldColor1 = Couleur1;
+			oldColor2 = Couleur2;
 		}
 
-		if(MeshShapeType != OldMeshShapeType) {
+		if (MeshShapeType != OldMeshShapeType) {
 			OldMeshShapeType = MeshShapeType;
 			ModuleShape.meshShapeType = MeshShapeType;
 		}
@@ -151,14 +153,14 @@ public class ParticuleStaticObject : MonoBehaviour
 			ModuleExternalForce.multiplier = WindZoneMultiplier;
 			oldWindZoneMultiplier = WindZoneMultiplier;
 		}
-		
-		if(oldLimiteMax != LimitMax) {
+
+		if (oldLimiteMax != LimitMax) {
 			oldLimiteMax = LimitMax;
 			ModuleMain.maxParticles = LimitMax;
 			//Setup();
 		}
 
-		if(oldstartLifetime != startLifetime) {
+		if (oldstartLifetime != startLifetime) {
 			ParticleSystem.MinMaxCurve minMax = new ParticleSystem.MinMaxCurve(startLifetime.x, startLifetime.y);
 			ModuleMain.startLifetime = minMax;
 			oldstartLifetime = startLifetime;
