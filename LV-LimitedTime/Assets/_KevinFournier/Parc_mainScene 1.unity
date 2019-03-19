@@ -1566,6 +1566,8 @@ MonoBehaviour:
   NbOfRepetition: -1
   map: {fileID: 28886176468757132, guid: 8ee04e1f17f7f5549acabd4c8d8a68c4, type: 2}
   Foot: 0
+  Footprint: {fileID: 7402465939278380163, guid: 7eb9c78534e9cb94caca9c5a696fb2b1,
+    type: 3}
 --- !u!82 &78725910
 AudioSource:
   m_ObjectHideFlags: 0
@@ -22531,6 +22533,8 @@ MonoBehaviour:
   NbOfRepetition: -1
   map: {fileID: 28886176468757132, guid: 8ee04e1f17f7f5549acabd4c8d8a68c4, type: 2}
   Foot: 1
+  Footprint: {fileID: 7402465939278380163, guid: 7eb9c78534e9cb94caca9c5a696fb2b1,
+    type: 3}
 --- !u!65 &1666881631
 BoxCollider:
   m_ObjectHideFlags: 0
