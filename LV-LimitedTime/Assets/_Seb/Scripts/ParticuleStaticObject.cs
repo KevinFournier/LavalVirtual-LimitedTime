@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(ParticleSystem))]
 [ExecuteInEditMode]
-public class ParticuleTree : MonoBehaviour
+public class ParticuleStaticObject : MonoBehaviour
 {
 	[Header("Particules")]
 	public GameObject ObjetMesh;
@@ -15,8 +15,7 @@ public class ParticuleTree : MonoBehaviour
 	[Header("Parametres:")]
 	public int LimitMax = 10000;
 	public int RateOverTIme = 10000;
-	public Color Couleur1 = Color.magenta;
-	public Color Couleur2 = Color.red;
+	public Color Couleur = Color.magenta;
 	public ParticleSystemMeshShapeType MeshShapeType;
 	[HideInInspector]
 	public float startSpeed = 0f;
@@ -41,8 +40,7 @@ public class ParticuleTree : MonoBehaviour
 	float oldRateOverTime;
 	float oldWindZoneMultiplier;
 	int oldLimiteMax;
-	Color oldColor1;
-	Color oldColor2;
+	Color oldColor;
 	Vector2 oldstartLifetime;
 	ParticleSystemMeshShapeType OldMeshShapeType;
 
@@ -73,8 +71,7 @@ public class ParticuleTree : MonoBehaviour
 		ModuleMain.startSpeed = startSpeed;
 		ModuleMain.startLifetime = minMax;
 		ModuleMain.maxParticles = LimitMax;
-		ParticleSystem.MinMaxGradient minMaxGradient = new ParticleSystem.MinMaxGradient(Couleur1, Couleur2);
-		ModuleMain.startColor = minMaxGradient;
+		ModuleMain.startColor = Couleur;
 		ModuleMain.simulationSpace = ParticleSystemSimulationSpace.World;
 		//ModuleMain.customSimulationSpace = transform;
 		ModuleMain.startSize = startSize;
@@ -141,11 +138,9 @@ public class ParticuleTree : MonoBehaviour
 		}
 
 
-		if (Couleur1 != oldColor1 || Couleur2 != oldColor2) {
-			ParticleSystem.MinMaxGradient minMaxGradient = new ParticleSystem.MinMaxGradient(Couleur1, Couleur2);
-			ModuleMain.startColor = minMaxGradient;
-			oldColor1 = Couleur1;
-			oldColor2 = Couleur2;
+		if (Couleur != oldColor) {
+			ModuleMain.startColor = Couleur;
+			oldColor = Couleur;
 		}
 
 		if(MeshShapeType != OldMeshShapeType) {
