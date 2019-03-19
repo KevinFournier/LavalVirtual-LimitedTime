@@ -37,15 +37,23 @@ public class WalkSound : SoundPlayer
         if (!collision.gameObject.CompareTag(Tags.Ground))
             return;
 
-        GameObject f = Instantiate(
-                Footprint,
-                new Vector3(
-                    collision.contacts[0].point.x,
-                    collision.contacts[0].point.y + 0.1f,
-                    collision.contacts[0].point.z),
-                Quaternion.Euler(-90f, 0f, 90f));
+		GameObject f = Instantiate(
+				Footprint,
+				new Vector3(
+					collision.contacts[0].point.x,
+					collision.contacts[0].point.y + 0.03f,
+					collision.contacts[0].point.z),
+				Quaternion.Euler(0,0,0));
 
-        if (Foot == Foot.Right)
+		f.transform.SetParent(transform);
+		f.transform.localRotation = Quaternion.Euler(0, 180, 0);
+
+		f.transform.SetParent(null);
+		
+		f.transform.LookAt(f.transform.position + (Vector3.down * 10), f.transform.up);
+
+
+		if (Foot == Foot.Right)
             f.transform.localScale
                 = new Vector3(
                     f.transform.localScale.x * -1,
