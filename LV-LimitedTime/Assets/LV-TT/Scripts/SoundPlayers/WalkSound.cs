@@ -55,4 +55,20 @@ public class WalkSound : SoundPlayer
         Destroy(f, 3f);
 
     }
+
+    public override void PlaySound()
+    {
+        if (AudioClips != null && AudioClips.Count != 0)
+        {
+
+
+            AudioClip clip = AudioClips[0];
+            if (clip != null)
+            {
+                Source.clip = clip;
+                Source.Play();
+            }
+        }
+    }
+
 }
