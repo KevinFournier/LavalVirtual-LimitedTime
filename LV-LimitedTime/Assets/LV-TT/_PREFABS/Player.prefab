@@ -1542,8 +1542,10 @@ GameObject:
   - component: {fileID: 4418093947570900046}
   - component: {fileID: 4418093947570900047}
   - component: {fileID: 4418093947570900044}
+  - component: {fileID: 2128919695642811428}
   - component: {fileID: 4418093947570900041}
   - component: {fileID: 4418093947570900040}
+  - component: {fileID: 551103354282850280}
   m_Layer: 0
   m_Name: Cube
   m_TagString: LeftFoot
@@ -1623,6 +1625,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &2128919695642811428
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4418093947570900050}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4418093947570900041
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1635,9 +1650,9 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!82 &4418093947570900040
 AudioSource:
@@ -1650,7 +1665,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -1753,6 +1768,32 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &551103354282850280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4418093947570900050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cebe69e7d0f3b94596a02f715cce24d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AudioClips:
+  - {fileID: 8300000, guid: 02ce40cf187655840b131825fa3995b1, type: 3}
+  - {fileID: 8300000, guid: 971807d9d56645f479918694a8c3d245, type: 3}
+  - {fileID: 8300000, guid: b2592506300aaf440b10dadb0d64e552, type: 3}
+  PlayAtStart: 0
+  Loop: 0
+  LoopWithDelay: 0
+  LoopRandom: 0
+  LoopDelay: {x: 0, y: 0}
+  NbOfRepetition: -1
+  map: {fileID: 28886176468757132, guid: 8ee04e1f17f7f5549acabd4c8d8a68c4, type: 2}
+  Foot: 0
+  Footprint: {fileID: 7402465939278380163, guid: 7eb9c78534e9cb94caca9c5a696fb2b1,
+    type: 3}
 --- !u!1 &4418093948975062828
 GameObject:
   m_ObjectHideFlags: 0
@@ -1859,8 +1900,10 @@ GameObject:
   - component: {fileID: 4418093949272430337}
   - component: {fileID: 4418093949272430342}
   - component: {fileID: 4418093949272430343}
+  - component: {fileID: 5062332481276395636}
   - component: {fileID: 4418093949272430340}
   - component: {fileID: 4418093949272430336}
+  - component: {fileID: 7300360490371045836}
   m_Layer: 0
   m_Name: Cube
   m_TagString: RightFoot
@@ -1940,6 +1983,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &5062332481276395636
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4418093949272430346}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4418093949272430340
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1952,9 +2008,9 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!82 &4418093949272430336
 AudioSource:
@@ -1967,7 +2023,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -2052,6 +2108,32 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7300360490371045836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4418093949272430346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cebe69e7d0f3b94596a02f715cce24d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AudioClips:
+  - {fileID: 8300000, guid: 02ce40cf187655840b131825fa3995b1, type: 3}
+  - {fileID: 8300000, guid: 971807d9d56645f479918694a8c3d245, type: 3}
+  - {fileID: 8300000, guid: b2592506300aaf440b10dadb0d64e552, type: 3}
+  PlayAtStart: 0
+  Loop: 0
+  LoopWithDelay: 0
+  LoopRandom: 0
+  LoopDelay: {x: 0, y: 0}
+  NbOfRepetition: -1
+  map: {fileID: 28886176468757132, guid: 8ee04e1f17f7f5549acabd4c8d8a68c4, type: 2}
+  Foot: 1
+  Footprint: {fileID: 7402465939278380163, guid: 7eb9c78534e9cb94caca9c5a696fb2b1,
+    type: 3}
 --- !u!1 &4419074156482556363
 GameObject:
   m_ObjectHideFlags: 0
