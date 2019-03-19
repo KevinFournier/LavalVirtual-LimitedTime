@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4f8ab7d8421243046900598d4c1529f7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - Collider: {instanceID: 0}
+  - MySkinnedMeshRenderer: {instanceID: 0}
+  - ParticuleMaterial: {fileID: 2100000, guid: 5803936e8d941494bb7fa88a75c6aaa8, type: 2}
+  - Particules: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
