@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ParticleSystem))]
 public class ParticleOnSelectedZone : MonoBehaviour {
 
 	public Collider Collider;
@@ -22,19 +23,14 @@ public class ParticleOnSelectedZone : MonoBehaviour {
 	[Range(0, 0.3f)]
 	public float startSize = 0.01f;
 	public Vector2 startLifetime = new Vector2(0.5f, 1);
-	public float WindZoneMultiplier = 0.1f;
 
 
 	Vector3[] ValidPoints;
 	int countValidPoint = 0;
-	Mesh Mesh;
-
-	GameObject ParticleHolder;
+	Mesh my_Mesh;
 
 	ParticleSystem.MainModule ModuleMain;
 	ParticleSystem.EmissionModule ModuleEmission;
-	ParticleSystem.ShapeModule ModuleShape;
-	ParticleSystem.ExternalForcesModule ModuleExternalForce;
 	ParticleSystem.SizeOverLifetimeModule ModuleSizeOverLifetime;
 
 	ParticleSystemRenderer ParticleSystemRenderer;
@@ -42,16 +38,17 @@ public class ParticleOnSelectedZone : MonoBehaviour {
 	// Start is called before the first frame update
 	[ContextMenu("Setup")]
 	void Start() {
-		Mesh = new Mesh();
+		my_Mesh = new Mesh();
 
-		ParticleHolder = new GameObject("ParticleHolder");
-		ParticleHolder.transform.SetParent(MySkinnedMeshRenderer.transform.parent);
-		ParticleHolder.transform.rotation = Quaternion.Euler(-90, 0, 0);
-		Particules = ParticleHolder.AddComponent<ParticleSystem>();
-		ParticleSystemRenderer = ParticleHolder.GetComponent<ParticleSystemRenderer>();
+		Particules = GetComponent<ParticleSystem>();
+		ParticleSystemRenderer = GetComponent<ParticleSystemRenderer>();
+
+		conteneur = new GameObject("conteneur");
+		conteneur.transform.SetParent(transform);
 
 		Setup();
 	}
+
 
 	void Setup() {
 
@@ -88,62 +85,62 @@ public class ParticleOnSelectedZone : MonoBehaviour {
 		ModuleSizeOverLifetime.size = minMaxCurve;
 
 		//
-		// SHAPE MODULE
-		ModuleShape = Particules.shape;
-		ModuleShape.enabled = true;
-		ModuleShape.shapeType = ParticleSystemShapeType.Mesh;
-		ModuleShape.meshShapeType = ParticleSystemMeshShapeType.Vertex;
-		ModuleShape.useMeshColors = false;
-		ModuleShape.mesh = Mesh;
-		ModuleShape.meshShapeType = MeshShapeType;
-		//
 		// RENDERER MODULE
 		ParticleSystemRenderer.material = ParticuleMaterial;
 
-		//
-		// EXTERNAL FORCE MODULE
-		ModuleExternalForce = Particules.externalForces;
-		ModuleExternalForce.enabled = true;
-		ModuleExternalForce.influenceFilter = ParticleSystemGameObjectFilter.LayerMask;
-		ModuleExternalForce.multiplier = WindZoneMultiplier;
-
-		countParticle();
 	}
+
 
 	List<Vector3> PointsInZone = new List<Vector3>();
 	List<int> PointsInZoneIndex = new List<int>();
 	ParticleSystem.Particle[] particlesArray;
 
-	void countParticle() {
-
-		countValidPoint = 0;
-		for (int i = 0 ; i < Mesh.vertexCount; i++) {
-			var v = Mesh.vertices[i];
-
-			if (Collider.bounds.Contains(v)) {
-
-				countValidPoint++;
-				PointsInZone.Add(v);
-				PointsInZoneIndex.Add(i);
-				/*
-				GameObject g = GameObject.CreatePrimitive(PrimitiveType.Cube);
-				g.transform.SetParent(ParticleHolder.transform);
-				g.transform.localScale = Vector3.one * 0.01f;
-				g.transform.localPosition = v;
-				*/
-			}
-		}
-		LimitMax = countValidPoint;
-		ModuleMain.maxParticles = LimitMax;
-
-		particlesArray = new ParticleSystem.Particle[LimitMax];
-	}
+	GameObject conteneur;
 
 
 	// Update is called once per frame
 	void FixedUpdate() {
+		countValidPoint = 0;
 
-		MySkinnedMeshRenderer.BakeMesh(Mesh);
+		//Mesh Mesh = new Mesh();
+		MySkinnedMeshRenderer.BakeMesh(my_Mesh);
+
+
+		Destroy(conteneur);
+
+
+		int index = 0;
+
+		conteneur = new GameObject("conteneur");
+		conteneur.transform.SetParent(MySkinnedMeshRenderer.transform.parent);
+		conteneur.transform.localPosition = Vector3.zero;
+		conteneur.transform.localRotation = Quaternion.Euler(-90, 0, 0);
+
+		foreach (var v in my_Mesh.vertices) {
+			if (Collider.bounds.Contains(v)) {
+				countValidPoint++;
+
+				GameObject g = GameObject.CreatePrimitive(PrimitiveType.Cube);
+				g.transform.SetParent(conteneur.transform);
+				g.transform.localScale = Vector3.one * 0.01f;
+				g.transform.localPosition = v;
+
+
+			}
+			index++;
+		}
+
+
+
+		print(countValidPoint);
+		/*
+		LimitMax = countValidPoint;
+		ModuleMain.maxParticles = LimitMax;
+
+		particlesArray = new ParticleSystem.Particle[LimitMax];
+
+
+
 
 		Particules.GetParticles(particlesArray);
 
@@ -153,8 +150,7 @@ public class ParticleOnSelectedZone : MonoBehaviour {
 
 		Particules.SetParticles(particlesArray);
 
+	*/
 
-			
-		//print(countValidPOint);
 	}
 }
