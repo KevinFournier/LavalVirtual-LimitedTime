@@ -667,10 +667,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: efb4d89026d1e2c44b261a999803a54b, type: 3}
   PlayAtStart: 1
   Loop: 0
-  LoopWithDelay: 0
-  LoopRandom: 0
-  LoopDelay: {x: 1, y: 3}
-  NbOfRepetition: 2
+  LoopWithDelay: 1
+  LoopRandom: 1
+  LoopDelay: {x: 3, y: 3}
+  NbOfRepetition: -1
 --- !u!82 &601972542
 AudioSource:
   m_ObjectHideFlags: 0
