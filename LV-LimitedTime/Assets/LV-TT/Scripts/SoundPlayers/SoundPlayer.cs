@@ -122,7 +122,7 @@ public class SoundPlayer : MonoBehaviour
     /// <summary>
     /// Joue le premier son de la liste d'audioclip.
     /// </summary>
-    public void PlaySound()
+    public virtual void PlaySound()
     {
         if (!CanPlaySound())
             return;
