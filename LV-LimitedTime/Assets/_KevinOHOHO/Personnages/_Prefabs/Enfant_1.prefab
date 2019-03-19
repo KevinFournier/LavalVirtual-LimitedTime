@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4825643936110377860}
   - component: {fileID: 4825643936110377863}
   - component: {fileID: 4825643936110377862}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: partencule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4771,7 +4771,7 @@ GameObject:
   - component: {fileID: 4825643937067995470}
   - component: {fileID: 4825643937067995465}
   - component: {fileID: 4825643937067995464}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: partencule (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
