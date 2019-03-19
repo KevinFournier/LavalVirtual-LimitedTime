@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(ParticleSystem))]
+[ExecuteInEditMode]
 public class ParticuleTree : MonoBehaviour
 {
 	[Header("Particules")]
@@ -10,10 +11,15 @@ public class ParticuleTree : MonoBehaviour
 	public Material ParticuleMaterial;
 	public ParticleSystem Particules;
 
+
 	[Header("Parametres:")]
 	public int LimitMax = 10000;
 	public int RateOverTIme = 10000;
+	public Color Couleur = Color.magenta;
+	public ParticleSystemMeshShapeType MeshShapeType;
+	[HideInInspector]
 	public float startSpeed = 0f;
+	[Range(0,0.3f)]
 	public float startSize = 0.01f;
 	public Vector2 startLifetime = new Vector2(0.5f, 1);
 	public float WindZoneMultiplier = 0.1f;
@@ -25,8 +31,21 @@ public class ParticuleTree : MonoBehaviour
 	ParticleSystem.EmissionModule ModuleEmission;
 	ParticleSystem.ShapeModule ModuleShape;
 	ParticleSystem.ExternalForcesModule ModuleExternalForce;
+	ParticleSystem.SizeOverLifetimeModule ModuleSizeOverLifetime;
 
 	ParticleSystemRenderer ParticleSystemRenderer;
+
+	#region ParametresUpdate
+	float oldStartSize;
+	float oldRateOverTime;
+	float oldWindZoneMultiplier;
+	int oldLimiteMax;
+	Color oldColor;
+	Vector2 oldstartLifetime;
+	ParticleSystemMeshShapeType OldMeshShapeType;
+
+	#endregion
+
 
 	private void OnEnable() {
 		Setup();
@@ -52,6 +71,7 @@ public class ParticuleTree : MonoBehaviour
 		ModuleMain.startSpeed = startSpeed;
 		ModuleMain.startLifetime = minMax;
 		ModuleMain.maxParticles = LimitMax;
+		ModuleMain.startColor = Couleur;
 		ModuleMain.simulationSpace = ParticleSystemSimulationSpace.World;
 		//ModuleMain.customSimulationSpace = transform;
 		ModuleMain.startSize = startSize;
@@ -60,6 +80,18 @@ public class ParticuleTree : MonoBehaviour
 		// EMISSION MODULE
 		ModuleEmission = Particules.emission;
 		ModuleEmission.rateOverTime = RateOverTIme;
+
+		//
+		// SIZE OVER LIFETIME MODULE
+		ModuleSizeOverLifetime = Particules.sizeOverLifetime;
+		ModuleSizeOverLifetime.enabled = true;
+		Keyframe[] KeysMin = { new Keyframe(0, 0), new Keyframe(0.2f, 0.3f), new Keyframe(0.8f, 0.3f), new Keyframe(1, 0) };
+		Keyframe[] KeysMax = { new Keyframe(0, 0), new Keyframe(0.2f, 1), new Keyframe(0.8f, 1), new Keyframe(1, 0) };
+		AnimationCurve min = new AnimationCurve(KeysMin);
+		AnimationCurve max = new AnimationCurve(KeysMax);
+		ParticleSystem.MinMaxCurve minMaxCurve = new ParticleSystem.MinMaxCurve(1, min, max);
+		ModuleSizeOverLifetime.size = minMaxCurve;
+
 		//
 		// SHAPE MODULE
 		ModuleShape = Particules.shape;
@@ -67,7 +99,7 @@ public class ParticuleTree : MonoBehaviour
 		ModuleShape.meshShapeType = ParticleSystemMeshShapeType.Vertex;
 		ModuleShape.useMeshColors = false;
 		ModuleShape.meshRenderer = MeshRendererToCopy;
-
+		ModuleShape.meshShapeType = MeshShapeType;
 		//
 		// RENDERER MODULE
 		ParticleSystemRenderer.material = ParticuleMaterial;
@@ -85,12 +117,51 @@ public class ParticuleTree : MonoBehaviour
 
     void Start()
     {
+		oldStartSize = startSize;
+
 		Setup();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
+		if(Particules == null) { Setup(); }
+
+		if (startSize != oldStartSize) {
+			ModuleMain.startSize = startSize;
+			oldStartSize = startSize;
+		}
+
+		if (RateOverTIme != oldRateOverTime) {
+			ModuleEmission.rateOverTime = RateOverTIme;
+			oldRateOverTime = RateOverTIme;
+		}
+
+
+		if (Couleur != oldColor) {
+			ModuleMain.startColor = Couleur;
+			oldColor = Couleur;
+		}
+
+		if(MeshShapeType != OldMeshShapeType) {
+			OldMeshShapeType = MeshShapeType;
+			ModuleShape.meshShapeType = MeshShapeType;
+		}
+		if (oldWindZoneMultiplier != WindZoneMultiplier) {
+			ModuleExternalForce.multiplier = WindZoneMultiplier;
+			oldWindZoneMultiplier = WindZoneMultiplier;
+		}
+		
+		if(oldLimiteMax != LimitMax) {
+			oldLimiteMax = LimitMax;
+			ModuleMain.maxParticles = LimitMax;
+			//Setup();
+		}
+
+		if(oldstartLifetime != startLifetime) {
+			ParticleSystem.MinMaxCurve minMax = new ParticleSystem.MinMaxCurve(startLifetime.x, startLifetime.y);
+			ModuleMain.startLifetime = minMax;
+			oldstartLifetime = startLifetime;
+		}
+	}
 }
