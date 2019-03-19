@@ -2230,7 +2230,7 @@ GameObject:
   - component: {fileID: 7639168849181428031}
   - component: {fileID: 7639168849181428025}
   - component: {fileID: 7639168849181428028}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: partencule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6990,7 +6990,7 @@ GameObject:
   - component: {fileID: 7639168850021895998}
   - component: {fileID: 7639168850021895999}
   - component: {fileID: 7639168850021895993}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: partencule (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
