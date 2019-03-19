@@ -9,11 +9,12 @@ public class WalkSound : SoundPlayer
 {
     public Texture2D map;
     public Foot Foot;
+    public GameObject Footprint;
 
-	private void Start()
+    private void Start()
     {
         Init();
-	}
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -36,7 +37,22 @@ public class WalkSound : SoundPlayer
         if (!collision.gameObject.CompareTag(Tags.Ground))
             return;
 
-        // TODO: Générer gameObject de Seb.
-        print(collision.contacts[0].point);
+        GameObject f = Instantiate(
+                Footprint,
+                new Vector3(
+                    collision.contacts[0].point.x,
+                    collision.contacts[0].point.y + 0.1f,
+                    collision.contacts[0].point.z),
+                Quaternion.identity);
+
+        if (Foot == Foot.Right)
+            f.transform.localScale
+                = new Vector3(
+                    f.transform.localScale.x * -1,
+                    f.transform.localScale.y,
+                    f.transform.localScale.z);
+
+        Destroy(f, 3f);
+
     }
 }
