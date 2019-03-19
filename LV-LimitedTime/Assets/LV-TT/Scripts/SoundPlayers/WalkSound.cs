@@ -43,7 +43,7 @@ public class WalkSound : SoundPlayer
                     collision.contacts[0].point.x,
                     collision.contacts[0].point.y + 0.1f,
                     collision.contacts[0].point.z),
-                Quaternion.identity);
+                Quaternion.Euler(-90f, 0f, 90f));
 
         if (Foot == Foot.Right)
             f.transform.localScale
