@@ -13,7 +13,7 @@ public class ParticuleStaticObject : MonoBehaviour {
 
 	[Header("Parametres:")]
 	public int LimitMax = 10000;
-	public int RateOverTIme = 10000;
+	public int RateOverTime = 10000;
 	public Color Couleur1 = Color.magenta;
 	public Color Couleur2 = Color.red;
 	public ParticleSystemMeshShapeType MeshShapeType;
@@ -81,7 +81,7 @@ public class ParticuleStaticObject : MonoBehaviour {
 		//
 		// EMISSION MODULE
 		ModuleEmission = Particules.emission;
-		ModuleEmission.rateOverTime = RateOverTIme;
+		ModuleEmission.rateOverTime = RateOverTime;
 
 		//
 		// SIZE OVER LIFETIME MODULE
@@ -132,9 +132,9 @@ public class ParticuleStaticObject : MonoBehaviour {
 			oldStartSize = startSize;
 		}
 
-		if (RateOverTIme != oldRateOverTime) {
-			ModuleEmission.rateOverTime = RateOverTIme;
-			oldRateOverTime = RateOverTIme;
+		if (RateOverTime != oldRateOverTime) {
+			ModuleEmission.rateOverTime = RateOverTime;
+			oldRateOverTime = RateOverTime;
 		}
 
 
